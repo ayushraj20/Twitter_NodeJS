@@ -1,18 +1,17 @@
 import express from "express";
+import bodyParser from "body-parser";
 import { connect } from "./config/database.js";
-import TweetService from "./services/tweet-service.js";
+import apiRoutes from "./routes/index.js";
 
 const app = express();
+
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
+
+app.use("/api", apiRoutes);
 
 app.listen(3000, async () => {
   console.log("Server Started...");
   await connect();
   console.log("MongoDB Connected");
-
-  const service = new TweetService();
-  const response = await service.create({
-    content: "Done with the #refactor",
-  });
-
-  console.log(response);
 });
